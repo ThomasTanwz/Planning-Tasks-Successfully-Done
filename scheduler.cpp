@@ -1,16 +1,17 @@
+#include<stdio.h>
 #include<iostream>
 #include<fstream>
 #include<queue>
 #include<stack>
-#include<bits/stc++.h>
+
 using namespace std;
 
 class scheduler{
 private:
 	queue<string> notDone;
 	stack<string> done;
-	string taskFile = "./NotDone.txt";
-	string doneFile = "./Done.txt";
+	char* taskFile = "./NotDone.txt";
+	char* doneFile = "./Done.txt";
 public:
 
 	void writeFile(string filename, string task){
@@ -33,7 +34,7 @@ public:
 	}
 
 	//this function removes the last task line(aka the queue's front) in the text file
-	void remove_undone_task(string fileName){
+	void remove_undone_task(char* fileName){
 		size_t targetNum = notDone.size();
 		ifstream targetFile(fileName);
 		ofstream doneFile;
@@ -42,14 +43,14 @@ public:
 		int line_num = 0;
 		while(targetFile.get(c)){
 			if(c == '\n')
-				line_number ++;
-			if(line_number != targetNum)
+				line_num ++;
+			if(line_num != targetNum)
 				doneFile << c;
 		}
 		doneFile.close();
 		targetFile.close();
 		remove(fileName);
-		rename("temp.txt", file_name);
+		rename("temp.txt", fileName);
 	}
 
 	void level_visualize(string target){
@@ -67,9 +68,25 @@ public:
 
 	void scheduleVisualizer(string choice){
 		if(choice == "done"){
-			
+			stackVisualize(done);
 		} else if(choice == "todo"){
-		
+			queueVisualize(notDone);
+		}
+	}
+
+	void stackVisualize(stack<string> target){
+		while(!target.empty()){
+			string curTask = target.top();
+			level_visualize(curTask);
+			target.pop();
+		}
+	}
+
+	void queueVisualize(queue<string> target){
+		while(!target.empty()){
+			string curTask = target.front();
+			level_visualize(curTask);
+			target.pop();
 		}
 	}
 
