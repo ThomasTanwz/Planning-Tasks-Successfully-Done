@@ -1,6 +1,16 @@
 #include"scheduler.h"
 using namespace std;
 
+scheduler::scheduler(): taskFile("./database/TO-DO.txt"), doneFile("./database/finished.txt"){
+	if(mkdir("database", 0777) != -1){
+		cout<<"creating database..."<<endl;
+		ofstream outfile0(taskFile);
+		ofstream outfile1(doneFile);
+	}else{
+		cout<<"existing database detected, welcome back!"<<endl;
+	}
+}
+
 void scheduler::writeFile(string filename, string task){
 	ofstream manager;
 	manager.open(filename);
@@ -39,39 +49,42 @@ void scheduler::remove_undone_task(char* fileName){
 	rename("temp.txt", fileName);
 }
 
+//visualizing part
 void scheduler::level_visualize(string target){
-	size_t wrapper_length = target.length() + 4;
-	for(int i = 0; i < wrapper_length; ++i)
-		cout<<"*";
-	cout << endl;
-	cout << "* ";
-	cout <<target;
-	cout <<" *"<<endl;
-	for(int i = 0; i < wrapper_length; ++i)
-		cout<<"*";
-	cout<<endl;
-}
-
-void scheduler::schedule_visualize(string choice){
-	if(choice == "done"){
-		stack_visualize(done);
-	} else if(choice == "todo"){
-		queue_visualize(notDone);
-	}
+        size_t wrapper_length = target.length() + 4;
+        for(int i = 0; i < wrapper_length; ++i)
+                cout<<"*";
+        cout << endl;
+        cout << "* ";
+        cout <<target;
+        cout <<" *"<<endl;
+        for(int i = 0; i < wrapper_length; ++i)
+                cout<<"*";
+        cout<<endl;
 }
 
 void scheduler::stack_visualize(stack<string> target){
-	while(!target.empty()){
-		string curTask = target.top();
-		level_visualize(curTask);
-		target.pop();
-	}
+        while(!target.empty()){
+                string curTask = target.top();
+                level_visualize(curTask);
+                target.pop();
+        }
 }
 
 void scheduler::queue_visualize(queue<string> target){
-	while(!target.empty()){
-		string curTask = target.front();
-		level_visualize(curTask);
-		target.pop();
-	}
+        while(!target.empty()){
+                string curTask = target.front();
+                level_visualize(curTask);
+                target.pop();
+        }
 }
+
+
+void scheduler::schedule_visualize(string choice){
+        if(choice == "done"){
+                stack_visualize(done);
+        } else if(choice == "todo"){
+                queue_visualize(notDone);
+        }
+}
+

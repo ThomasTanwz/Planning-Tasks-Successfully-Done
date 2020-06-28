@@ -3,6 +3,7 @@
 #include<fstream>
 #include<queue>
 #include<stack>
+#include<sys/stat.h>
 
 using namespace std;
 
@@ -14,9 +15,10 @@ class scheduler{
 private:
         queue<string> notDone;
         stack<string> done;
-        char* taskFile = "./NotDone.txt";
-        char* doneFile = "./Done.txt";
+        char* taskFile;
+        char* doneFile;
 public:
+	scheduler();
 	void writeFile(string fileName, string task);
 	void addTask(string newTask);
 	void popTask();
